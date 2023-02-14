@@ -46,4 +46,13 @@ public class ExpenseModel {
     public void setCreationDate(LocalDate creationDate) {
         this.creationDate = creationDate;
     }
+
+    @Override
+    public String toString() {
+        return "ExpenseModel{" +
+                "amount=" + amount +
+                ", title='" + title + '\'' +
+                ", creationDate=" + creationDate +
+                '}';
+    }
 }
