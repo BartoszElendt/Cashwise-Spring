@@ -27,8 +27,8 @@ public class InMemoryExpenseRepository implements ExpenseRepository {
     }
 
     @Override
-    public Expense updateExpense(Expense expense) {
-        return storage.put(expense.expenseId(),expense);
+    public Expense updateExpense(ExpenseId expenseId) {
+        return storage.put(expenseId, updateExpense(expenseId));
     }
 
 }

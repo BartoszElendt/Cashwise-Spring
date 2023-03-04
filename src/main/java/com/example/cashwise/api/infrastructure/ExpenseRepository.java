@@ -12,5 +12,5 @@ public interface ExpenseRepository {
 
     void deleteExpenseById(ExpenseId expenseId);
 
-    Expense updateExpense (Expense expense);
+    Expense updateExpense (ExpenseId expenseId);
 }

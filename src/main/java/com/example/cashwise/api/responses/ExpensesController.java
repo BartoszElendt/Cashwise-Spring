@@ -33,9 +33,10 @@ class ExpensesController {  //controllery nie muszą być publiczne
     //aby miec pelna kontrole nad cala odpowiedzia (body+status+headers) tworzymy specjalny obiekt response entity i ustawiomy w nim wszytskie info na temat odp i wstawiamy zwracany obiekt do srodka jako jego body
 
 
-    @GetMapping("/{rawExpenseId}")//nie podajemy wartści, skorzytsa z base path
-     ResponseEntity<ExpenseResponseDto> getSingleExpense(
-             @PathVariable String rawExpenseId   //RE- zawiera status jakie są odp, jakie są nagłwóki,
+    @GetMapping("/{rawExpenseId}")
+//nie podajemy wartści, skorzytsa z base path
+    ResponseEntity<ExpenseResponseDto> getSingleExpense(
+            @PathVariable String rawExpenseId   //RE- zawiera status jakie są odp, jakie są nagłwóki,
     ) {
         //log.debug(rawExpenseId);
         Optional<Expense> expenseById = expensesService.getExpenseById(new ExpenseId(rawExpenseId));  //optional pozwala na to żeby nie pisac ifów
@@ -52,24 +53,35 @@ class ExpensesController {  //controllery nie muszą być publiczne
         return ResponseEntity.created(URI.create("/expenses/" + expenseResponseDto.expnseId())).body(expenseResponseDto);
 
     }
-
+/*
     @PutMapping("/{rawExpenseId}")
     ResponseEntity<ExpenseResponseDto> updateExpense(
             @PathVariable String rawExpenseId,
             @RequestBody UpdateExpenseRequest request
     ) {
         ExpenseId updateExpense = new ExpenseId(rawExpenseId);
-      expensesService.updateExpense(request.title(), request.amount(),request.expenseId());
-            return  ResponseEntity.of(ExpenseResponseDto.fromDomain());
-        }
+        expensesService.updateExpense(request.title(), request.amount(),request.expenseId());
+        return  ResponseEntity.of(ExpenseResponseDto.fromDomain(new ExpenseId(rawExpenseId, )));
+      }
 
+ */
 
     @DeleteMapping("/{rawExpenseId}")
-    ResponseEntity<Void> deleteExpense (
-            @PathVariable String rawExpenseId){
+    ResponseEntity<Void> deleteExpense(
+            @PathVariable String rawExpenseId) {
         expensesService.deleteExpense(new ExpenseId(rawExpenseId));
         return ResponseEntity.noContent().build();
 
+    }
+
+    @PutMapping("/{rawExpenseId}")
+    public ResponseEntity<ExpenseResponseDto> updateExpense(
+            @PathVariable String rawExpenseId,
+            @RequestBody UpdateExpenseRequest request
+    ) {
+        ExpenseId expenseId = new ExpenseId(rawExpenseId);
+        return ResponseEntity.ok(ExpenseResponseDto.fromDomain(
+                expensesService.updateExpense(request.title(), request.amount(), expenseId)));
     }
 
 
@@ -90,17 +102,13 @@ class ExpensesController {  //controllery nie muszą być publiczne
 
 
 
+   /* @PatchMapping("/{id}")
+    ResponseEntity<ExpenseResponseDto> updateUser(@PathVariable String id, @Valid @RequestBody PatchExpenseRequest request) {
+        return ResponseEntity.of(expensesService.updateExpense(id, request.amout(), request.title(), request.expenseId())
+                .map(ExpenseResponseDto::fromDomain));
+    }
 
-
-
-
-
-
-
-
-
-
-
+    */
 
 
 }
